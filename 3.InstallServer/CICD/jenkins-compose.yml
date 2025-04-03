@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  jenkins:
+    # lts 表示长期支持版本。
+    image: jenkins/jenkins:lts
+    # web 端口为8080,代理端口为50000
+    ports:
+      - "8080:8080"  # Jenkins web interface
+      - "50000:50000"  # Jenkins agents
+    volumes:
+      - jenkins_data:/var/jenkins_home  # Jenkins data volume
+      - jenkins_backup:/var/jenkins_backup  # Jenkins backup volume
+    # 设置重启规则，除非手工停止，否则一直保持启动状态
+    restart: unless-stopped  # Auto-restart unless manually stopped
+
+volumes:
+  jenkins_data:
+  jenkins_backup:

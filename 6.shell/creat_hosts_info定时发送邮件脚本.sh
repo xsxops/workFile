@@ -26,7 +26,7 @@
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #2、登录boss
-curl -s -k -c cookie.ck 'xxx' >/dev/null
+curl -s -k -c cookie.ck 'https://boss.pppcloud.cn/smartBus-Manager-v1/users/login?username=zabbix&password=D2u1rZav1muFDgsrQZsi' >/dev/null
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,10 +38,10 @@ curl -s -k -c cookie.ck 'xxx' >/dev/null
 #4.1打印显示表头
 echo '客户邮箱 ,子账号 ,cpu ,内存 ,系统盘大小-GB ,数据盘大小-GB ,磁盘类型 ,自动备份周数 ,自动备份天数 ,带宽 ,创建时间 ,服务开始时间 ,服务到期时间 ,service_code ,Zone' >`date +%Y%m%d`.log
 
-curl -s -k -b cookie.ck 'xxx'$(date -d "7 days ago" +%F)'+00%3A00%3A00&create_time_max='$(date +%F)'+00%3A00%3A00&limit=500' \
+curl -s -k -b cookie.ck 'https://boss.pppcloud.cn/smartBus-Manager-v1/arrows?business=NORMAL&create_time_min='$(date -d "7 days ago" +%F)'+00%3A00%3A00&create_time_max='$(date +%F)'+00%3A00%3A00&limit=500' \
 	|jq -c '.data[] | {"客户邮箱":.customer.email,"子账号":.sub_account_login_name,"cpu":.cpu,"内存":.memory,"系统盘大小-GB":.sys_space,"数据盘大小-GB":.data_space,"磁盘类型":.disk_type,"自动备份周数":.auto_backup_week_num,"自动备份天数":.auto_backup_day_num,"带宽":.networks[1].band_width,"创建时间":.create_time,"服务开始时间":.begin_time,"服务到 期时间":.expire_time,"service_code":.service_code,"Zone":.zone.name}'\
 	|awk -F \" '{print $4,"," $8,"," $11,$13,$15,$17,$20,"," $23,$25,$27,$30, "," $34, ","$38, ","$42, ","$46}' \
-	|grep -Ev 'xusixian@xinnet.com'\
+	|grep -Ev 'sunjianxing@xinnet.com|tianyuanming@xinnet.com|wanghe@xinnet.com|xusixian@xinnet.com|chenyukun@xinnet.com|guojing@xinnet.com|jtyyunwei@xinnet.com'\
 	|awk -F \: '{print $1,$2,$3,$4,$5,$6,$7,($8":"$9":"$10),($11":"$12":"$13":"$14)}' \
 	>> `date +%Y%m%d`.log
 
@@ -69,10 +69,10 @@ iconv -f UTF-8 -t GBK `date +%Y%m%d`.log -o `date +%Y%m%d`.csv
 
 hostnum=$(cat `date +%Y%m%d`.log |grep -v "客户邮箱"|wc -l)
 echo -e "各位好: \n附件为箭头云从 `date -d "7 days ago" +%m月%d日` 到 `date +%m月%d日` 新增云主机详细信息,其中新增主机 $hostnum 台" \
-	| mail -r xusixian@xinnet.com \
+	| mail -r jiantouyun_monitor@pppcloud.cn \
 		-s "箭头云监控上周新增云主机信息--`date +%Y%m%d`" \
 		-a `date +%Y%m%d`.csv \
-		xusixian@xinnet.com
+		cloud_ops@xinnet.com
 
 rm -rf `date +%Y%m%d`.log
 rm -rf `date +%Y%m%d`.csv

@@ -40,8 +40,6 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
    sudo systemctl restart docker
 ```
 
-
-
 ### 3.安装 NVIDIA CUDA Toolkit (可选)
 
 ```bash
@@ -63,10 +61,7 @@ sudo vim /etc/docker/daemon.json
    }
    
 sudo systemctl restart docker
-
 ```
-
-
 
 ### 5.验证安装
 
